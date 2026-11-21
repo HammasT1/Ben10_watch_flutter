@@ -69,4 +69,72 @@ void main() {
     await tester.pump();
     expect(find.text('TRANSFORMING'), findsNothing);
   });
+
+  group('dial physics', () {
+    Offset rimPoint(WidgetTester tester) {
+      final rect = tester.getRect(dial);
+      return rect.center + Offset(rect.width * 0.4, 0);
+    }
+
+    Future<String> settle(WidgetTester tester) async {
+      for (var i = 0; i < 40; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      final hud = tester.widgetList<Text>(find.textContaining('ALIEN '));
+      return hud.single.data!;
+    }
+
+    testWidgets('a flick coasts past several aliens then stops', (
+      tester,
+    ) async {
+      await tester.pumpWidget(const OmnitrixApp());
+
+      await tester.flingFrom(rimPoint(tester), const Offset(0, 160), 2400);
+      await tester.pump(const Duration(milliseconds: 100));
+      final mid = tester
+          .widgetList<Text>(find.textContaining('ALIEN '))
+          .single
+          .data;
+
+      final rest = await settle(tester);
+      expect(rest, isNot('ALIEN 1'));
+      expect(rest, isNot(mid), reason: 'dial should keep coasting');
+
+      // Fully settled: more time changes nothing.
+      expect(await settle(tester), rest);
+    });
+
+    testWidgets('a small slow drag snaps back to the same alien', (
+      tester,
+    ) async {
+      await tester.pumpWidget(const OmnitrixApp());
+
+      final gesture = await tester.startGesture(rimPoint(tester));
+      // Well under half a slot (~16 degrees), moved slowly.
+      for (var i = 0; i < 4; i++) {
+        await gesture.moveBy(const Offset(0, 4));
+        await tester.pump(const Duration(milliseconds: 200));
+      }
+      await gesture.up();
+
+      expect(await settle(tester), 'ALIEN 1');
+    });
+
+    testWidgets('core tap is ignored while the dial is still spinning', (
+      tester,
+    ) async {
+      await tester.pumpWidget(const OmnitrixApp());
+
+      await tester.flingFrom(rimPoint(tester), const Offset(0, 160), 2400);
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.tapAt(tester.getCenter(dial));
+      await tester.pump();
+      expect(find.text('TRANSFORMING'), findsNothing);
+
+      await settle(tester);
+      await tester.tapAt(tester.getCenter(dial));
+      await tester.pump();
+      expect(find.text('TRANSFORMING'), findsOneWidget);
+    });
+  });
 }

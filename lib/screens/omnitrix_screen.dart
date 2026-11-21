@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 
 import '../models/effect_seeds.dart';
 import '../models/watch_phase.dart';
@@ -32,6 +33,24 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
   /// Tap radius of the core, as a fraction of the watch size.
   static const _coreTapRadius = 0.2;
 
+  /// Flicks slower than this (rad/s) just snap to the nearest slot.
+  static const _minFlingVelocity = 1.2;
+
+  /// Hard cap on flick speed so a wild swipe can't spin forever.
+  static const _maxFlingVelocity = 24.0;
+
+  /// Friction used to project where a flick would coast to. Lower = coasts
+  /// further (a 10 rad/s flick travels roughly 10 / -ln(drag) radians).
+  static const _dialDrag = 0.06;
+
+  /// Spring that carries the flick and settles on a slot with a small
+  /// overshoot, like a detent clicking into place.
+  static final _dialSpring = SpringDescription.withDampingRatio(
+    mass: 1,
+    stiffness: 34,
+    ratio: 0.78,
+  );
+
   static const _green = Color(0xFF1FFF8B);
   static const _red = Color(0xFFFF3B3B);
 
@@ -51,11 +70,19 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
   late final AnimationController _transformController;
   late final AnimationController _timeoutController;
   late final AnimationController _rechargeController;
+
+  /// Unbounded controller whose value is the dial angle while it coasts.
+  late final AnimationController _dialController;
   late final Animation<double> _flashAnimation;
 
   WatchPhase _phase = WatchPhase.idle;
   double _dialAngle = 0;
   double _previousDragAngle = 0;
+  Offset _lastDragPosition = Offset.zero;
+
+  /// True when a touch landed on a coasting dial: that touch catches the
+  /// dial and must not also count as a core tap.
+  bool _touchCaughtSpin = false;
   int _selectedAlien = 0;
 
   @override
@@ -99,6 +126,9 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
             }
           });
 
+    _dialController = AnimationController.unbounded(vsync: this)
+      ..addListener(_onDialTick);
+
     _flashAnimation = CurvedAnimation(
       parent: _changeController,
       curve: Curves.easeOutCubic,
@@ -117,6 +147,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
     _transformController.dispose();
     _timeoutController.dispose();
     _rechargeController.dispose();
+    _dialController.dispose();
     super.dispose();
   }
 
@@ -198,6 +229,10 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
   // ---------------------------------------------------------------------------
 
   void _onPanStart(DragStartDetails details, Size size) {
+    // Grabbing a coasting dial catches it where it is.
+    _touchCaughtSpin = false;
+    _dialController.stop();
+    _lastDragPosition = details.localPosition;
     _previousDragAngle = _pointerAngle(
       details.localPosition,
       size.center(Offset.zero),
@@ -210,6 +245,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
     final currentDragAngle = _pointerAngle(details.localPosition, center);
     final delta = _normalizeAngle(currentDragAngle - _previousDragAngle);
     _previousDragAngle = currentDragAngle;
+    _lastDragPosition = details.localPosition;
 
     setState(() {
       _dialAngle += delta;
@@ -218,7 +254,66 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
     _updateAlienSelection();
   }
 
+  void _onPanEnd(DragEndDetails details, Size size) {
+    if (_phase != WatchPhase.idle) return;
+
+    // Angular velocity = (r x v) / |r|^2, using the last pointer position
+    // relative to the dial centre. Same sign convention as atan2 above.
+    final r = _lastDragPosition - size.center(Offset.zero);
+    final v = details.velocity.pixelsPerSecond;
+    final r2 = r.distanceSquared;
+    var omega = r2 < 1 ? 0.0 : ((r.dx * v.dy) - (r.dy * v.dx)) / r2;
+    if (omega.abs() < _minFlingVelocity) omega = 0;
+    omega = omega.clamp(-_maxFlingVelocity, _maxFlingVelocity);
+
+    _settleDial(velocity: omega);
+  }
+
+  /// A touch that never became a drag (a tap). Flutter reports this before
+  /// the tap itself, so this is where we learn the dial was still moving.
+  void _onPanCancel() {
+    if (_phase != WatchPhase.idle) return;
+    _touchCaughtSpin = _dialController.isAnimating;
+    _settleDial();
+  }
+
+  /// Springs the dial from its current angle to a slot, carrying [velocity].
+  void _settleDial({double velocity = 0}) {
+    final coastTo = velocity == 0
+        ? _dialAngle
+        : FrictionSimulation(_dialDrag, _dialAngle, velocity).finalX;
+    final target = _nearestSlotAngle(coastTo);
+
+    // Already resting on a slot (e.g. a plain tap reports as a cancelled
+    // pan): don't start a zero-length spring that would block the core tap.
+    if (velocity == 0 && (target - _dialAngle).abs() < 1e-3) {
+      _dialController.stop();
+      return;
+    }
+
+    _dialController.value = _dialAngle;
+    _dialController.animateWith(
+      SpringSimulation(_dialSpring, _dialAngle, target, velocity),
+    );
+  }
+
+  void _onDialTick() {
+    setState(() => _dialAngle = _dialController.value);
+    _updateAlienSelection();
+  }
+
+  double get _slice => (math.pi * 2) / _aliens.length;
+
+  double _nearestSlotAngle(double angle) {
+    return (angle / _slice).round() * _slice;
+  }
+
   void _onTapUp(TapUpDetails details, Size size) {
+    // The dial has to come to rest before the core will trigger; a tap on a
+    // spinning dial just catches it.
+    final caught = _touchCaughtSpin || _dialController.isAnimating;
+    _touchCaughtSpin = false;
+    if (caught) return;
     final distance =
         (details.localPosition - size.center(Offset.zero)).distance;
     if (distance <= size.width * _coreTapRadius) {
@@ -242,9 +337,8 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
   }
 
   void _updateAlienSelection() {
-    final slice = (math.pi * 2) / _aliens.length;
     final normalized = _dialAngle % (math.pi * 2);
-    var index = (-normalized / slice).round() % _aliens.length;
+    var index = (-normalized / _slice).round() % _aliens.length;
     if (index < 0) {
       index += _aliens.length;
     }
@@ -328,6 +422,8 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
                   key: const Key('watch-dial'),
                   onPanStart: (d) => _onPanStart(d, watchBox),
                   onPanUpdate: (d) => _onPanUpdate(d, watchBox),
+                  onPanEnd: (d) => _onPanEnd(d, watchBox),
+                  onPanCancel: _onPanCancel,
                   onTapUp: (d) => _onTapUp(d, watchBox),
                   child: SizedBox(
                     width: watchSize,
