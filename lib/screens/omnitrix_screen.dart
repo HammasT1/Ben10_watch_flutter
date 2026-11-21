@@ -9,10 +9,14 @@ import '../painters/bubble_painter.dart';
 import '../painters/ring_pulse_painter.dart';
 import '../painters/shockwave_painter.dart';
 import '../painters/spark_painter.dart';
+import '../services/watch_feedback.dart';
 import '../widgets/transformed_view.dart';
 
 class OmnitrixScreen extends StatefulWidget {
-  const OmnitrixScreen({super.key});
+  const OmnitrixScreen({super.key, this.feedback});
+
+  /// Sound/haptics override (tests pass a silent one).
+  final WatchFeedback? feedback;
 
   @override
   State<OmnitrixScreen> createState() => _OmnitrixScreenState();
@@ -32,6 +36,9 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
 
   /// Tap radius of the core, as a fraction of the watch size.
   static const _coreTapRadius = 0.2;
+
+  /// Countdown seconds that get a warning beep.
+  static const _warningSeconds = 3;
 
   /// Flicks slower than this (rad/s) just snap to the nearest slot.
   static const _minFlingVelocity = 1.2;
@@ -75,7 +82,11 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
   late final AnimationController _dialController;
   late final Animation<double> _flashAnimation;
 
+  late final WatchFeedback _feedback;
+  late final bool _ownsFeedback;
+
   WatchPhase _phase = WatchPhase.idle;
+  int? _lastWarnedSecond;
   double _dialAngle = 0;
   double _previousDragAngle = 0;
   Offset _lastDragPosition = Offset.zero;
@@ -88,6 +99,8 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
   @override
   void initState() {
     super.initState();
+    _ownsFeedback = widget.feedback == null;
+    _feedback = widget.feedback ?? DeviceWatchFeedback();
     _changeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 430),
@@ -111,6 +124,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
     )..addListener(_onTransformTick);
     _timeoutController =
         AnimationController(vsync: this, duration: _timeoutDuration)
+          ..addListener(_onTimeoutTick)
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed &&
                 _phase == WatchPhase.transformed) {
@@ -123,6 +137,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
             if (status == AnimationStatus.completed &&
                 _phase == WatchPhase.recharging) {
               setState(() => _phase = WatchPhase.idle);
+              _feedback.play(WatchEvent.rechargeReady);
             }
           });
 
@@ -148,6 +163,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
     _timeoutController.dispose();
     _rechargeController.dispose();
     _dialController.dispose();
+    if (_ownsFeedback) _feedback.dispose();
     super.dispose();
   }
 
@@ -156,7 +172,12 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
   // ---------------------------------------------------------------------------
 
   void _startTransform() {
+    if (_phase == WatchPhase.recharging) {
+      _feedback.play(WatchEvent.denied);
+      return;
+    }
     if (_phase != WatchPhase.idle) return;
+    _feedback.play(WatchEvent.transformStart);
     setState(() => _phase = WatchPhase.transforming);
     _resetSparkSeeds();
     _changeController.forward(from: 0);
@@ -167,17 +188,33 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
     if (_phase == WatchPhase.transforming &&
         _transformController.value >= _transformPeak) {
       setState(() => _phase = WatchPhase.transformed);
+      _feedback.play(WatchEvent.transformed);
+      _lastWarnedSecond = null;
       _timeoutController.forward(from: 0);
+    }
+  }
+
+  void _onTimeoutTick() {
+    if (_phase != WatchPhase.transformed) return;
+    final remaining =
+        ((1 - _timeoutController.value) * _timeoutDuration.inSeconds).ceil();
+    if (remaining > 0 &&
+        remaining <= _warningSeconds &&
+        remaining != _lastWarnedSecond) {
+      _lastWarnedSecond = remaining;
+      _feedback.play(WatchEvent.timeoutWarning);
     }
   }
 
   void _revert() {
     if (_phase != WatchPhase.transformed) return;
+    _feedback.play(WatchEvent.reverted);
     _timeoutController.stop();
     setState(() => _phase = WatchPhase.idle);
   }
 
   void _enterRecharge() {
+    _feedback.play(WatchEvent.timedOut);
     setState(() => _phase = WatchPhase.recharging);
     _rechargeController.forward(from: 0);
   }
@@ -347,6 +384,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
       setState(() {
         _selectedAlien = index;
       });
+      _feedback.play(WatchEvent.dialTick);
       _resetSparkSeeds();
       _changeController.forward(from: 0);
     }
@@ -395,6 +433,12 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
                   : _buildWatchLayout(),
             ),
             Positioned.fill(child: IgnorePointer(child: _buildScreenEffects())),
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topRight,
+                child: _buildMuteToggle(),
+              ),
+            ),
           ],
         ),
       ),
@@ -665,6 +709,18 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMuteToggle() {
+    return IconButton(
+      key: const Key('mute-toggle'),
+      tooltip: _feedback.muted ? 'Unmute' : 'Mute',
+      color: const Color(0xFF91FFA8),
+      icon: Icon(
+        _feedback.muted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
+      ),
+      onPressed: () => setState(() => _feedback.muted = !_feedback.muted),
     );
   }
 

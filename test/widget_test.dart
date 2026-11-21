@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:ben10_flutter/main.dart';
+import 'package:ben10_flutter/services/watch_feedback.dart';
 
 void main() {
   final dial = find.byKey(const Key('watch-dial'));
 
   testWidgets('Omnitrix watch loads in idle state', (tester) async {
-    await tester.pumpWidget(const OmnitrixApp());
+    await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
 
     expect(find.text('ALIEN 1'), findsOneWidget);
     expect(find.text('TURN THE DIAL  •  TAP THE CORE'), findsOneWidget);
@@ -17,7 +18,7 @@ void main() {
   testWidgets('tapping the core transforms, times out and recharges', (
     tester,
   ) async {
-    await tester.pumpWidget(const OmnitrixApp());
+    await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
 
     await tester.tapAt(tester.getCenter(dial));
     await tester.pump();
@@ -47,7 +48,7 @@ void main() {
   });
 
   testWidgets('revert returns to idle without recharging', (tester) async {
-    await tester.pumpWidget(const OmnitrixApp());
+    await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
 
     await tester.tapAt(tester.getCenter(dial));
     await tester.pump();
@@ -62,7 +63,7 @@ void main() {
   });
 
   testWidgets('tapping off-core does not transform', (tester) async {
-    await tester.pumpWidget(const OmnitrixApp());
+    await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
 
     final rect = tester.getRect(dial);
     await tester.tapAt(rect.topLeft + const Offset(10, 10));
@@ -87,7 +88,7 @@ void main() {
     testWidgets('a flick coasts past several aliens then stops', (
       tester,
     ) async {
-      await tester.pumpWidget(const OmnitrixApp());
+      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
 
       await tester.flingFrom(rimPoint(tester), const Offset(0, 160), 2400);
       await tester.pump(const Duration(milliseconds: 100));
@@ -107,7 +108,7 @@ void main() {
     testWidgets('a small slow drag snaps back to the same alien', (
       tester,
     ) async {
-      await tester.pumpWidget(const OmnitrixApp());
+      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
 
       final gesture = await tester.startGesture(rimPoint(tester));
       // Well under half a slot (~16 degrees), moved slowly.
@@ -123,7 +124,7 @@ void main() {
     testWidgets('core tap is ignored while the dial is still spinning', (
       tester,
     ) async {
-      await tester.pumpWidget(const OmnitrixApp());
+      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
 
       await tester.flingFrom(rimPoint(tester), const Offset(0, 160), 2400);
       await tester.pump(const Duration(milliseconds: 50));
@@ -135,6 +136,83 @@ void main() {
       await tester.tapAt(tester.getCenter(dial));
       await tester.pump();
       expect(find.text('TRANSFORMING'), findsOneWidget);
+    });
+  });
+
+  group('sound and haptics', () {
+    Future<void> transform(WidgetTester tester) async {
+      await tester.tapAt(tester.getCenter(dial));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
+      await tester.pump(const Duration(milliseconds: 800));
+    }
+
+    testWidgets('full cycle fires events in order', (tester) async {
+      final feedback = SilentWatchFeedback();
+      await tester.pumpWidget(OmnitrixApp(feedback: feedback));
+
+      await transform(tester);
+      expect(feedback.played, [
+        WatchEvent.transformStart,
+        WatchEvent.transformed,
+      ]);
+
+      for (var i = 0; i < 160; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(
+        feedback.played.where((e) => e == WatchEvent.timeoutWarning).length,
+        3,
+        reason: 'one beep for each of the last 3 seconds',
+      );
+      expect(feedback.played, contains(WatchEvent.timedOut));
+
+      // Locked watch refuses the core.
+      await tester.tapAt(tester.getCenter(dial));
+      await tester.pump();
+      expect(feedback.played.last, WatchEvent.denied);
+
+      await tester.pump(const Duration(seconds: 8, milliseconds: 100));
+      await tester.pump();
+      expect(feedback.played.last, WatchEvent.rechargeReady);
+    });
+
+    testWidgets('revert plays the revert event', (tester) async {
+      final feedback = SilentWatchFeedback();
+      await tester.pumpWidget(OmnitrixApp(feedback: feedback));
+
+      await transform(tester);
+      await tester.tap(find.text('REVERT'));
+      await tester.pump();
+      expect(feedback.played.last, WatchEvent.reverted);
+    });
+
+    testWidgets('turning the dial ticks once per alien passed', (tester) async {
+      final feedback = SilentWatchFeedback();
+      await tester.pumpWidget(OmnitrixApp(feedback: feedback));
+
+      final rect = tester.getRect(dial);
+      await tester.flingFrom(
+        rect.center + Offset(rect.width * 0.4, 0),
+        const Offset(0, 160),
+        2400,
+      );
+      for (var i = 0; i < 40; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(feedback.played, isNotEmpty);
+      expect(feedback.played.every((e) => e == WatchEvent.dialTick), isTrue);
+    });
+
+    testWidgets('mute toggle flips the muted flag', (tester) async {
+      final feedback = SilentWatchFeedback();
+      await tester.pumpWidget(OmnitrixApp(feedback: feedback));
+
+      expect(find.byIcon(Icons.volume_up_rounded), findsOneWidget);
+      await tester.tap(find.byKey(const Key('mute-toggle')));
+      await tester.pump();
+      expect(feedback.muted, isTrue);
+      expect(find.byIcon(Icons.volume_off_rounded), findsOneWidget);
     });
   });
 }
