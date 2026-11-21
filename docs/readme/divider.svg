@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 16" width="1200" height="16">
+<defs>
+  <linearGradient id="spectrum" x1="0" x2="1"><stop offset="0.000" stop-color="#3BA8FF"/><stop offset="0.100" stop-color="#7BE35A"/><stop offset="0.200" stop-color="#C8E83A"/><stop offset="0.300" stop-color="#FF7A1A"/><stop offset="0.400" stop-color="#B0C4DE"/><stop offset="0.500" stop-color="#E3CF94"/><stop offset="0.600" stop-color="#9BE15D"/><stop offset="0.700" stop-color="#39FF14"/><stop offset="0.800" stop-color="#B57BFF"/><stop offset="0.900" stop-color="#FFE04D"/><stop offset="1.000" stop-color="#FF4D4D"/></linearGradient>
+  <linearGradient id="beam" x1="0" x2="1">
+    <stop offset="0" stop-color="#D8FFE4" stop-opacity="0"/>
+    <stop offset="0.5" stop-color="#D8FFE4"/>
+    <stop offset="1" stop-color="#D8FFE4" stop-opacity="0"/>
+  </linearGradient>
+  <filter id="g" x="-10%" y="-200%" width="120%" height="500%"><feGaussianBlur stdDeviation="2.5"/></filter>
+</defs>
+<rect x="0" y="7" width="1200" height="2" rx="1" fill="url(#spectrum)" opacity="0.45"/>
+<rect x="-240" y="6" width="240" height="4" rx="2" fill="url(#beam)" filter="url(#g)">
+  <animate attributeName="x" values="-240;1200" dur="3.2s" repeatCount="indefinite"/>
+</rect>
+<rect x="-160" y="7" width="160" height="2" rx="1" fill="url(#beam)">
+  <animate attributeName="x" values="-160;1200" dur="3.2s" repeatCount="indefinite"/>
+</rect>
+</svg>

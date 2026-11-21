@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" role="img">
+<style>
+  .spin { transform-box: view-box; animation: spin 36s linear infinite; }
+  .spin-rev { transform-box: view-box; animation: spin 48s linear infinite reverse; }
+  .breathe { transform-box: fill-box; transform-origin: center; animation: breathe 2.4s ease-in-out infinite; }
+  .flicker { animation: flicker 6s linear infinite; }
+  .blink { animation: blink 1s steps(1) infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes breathe { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.05); opacity: 1; } }
+  @keyframes flicker { 0%,18%,22%,62%,64%,100% { opacity: 1; } 20%,63% { opacity: .45; } }
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes wave { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+  @keyframes lit0 { 0%,6%,88%,100% { opacity: 1; } 8%,86% { opacity: 0; } }
+  @keyframes lit1 { 0%,100% { opacity: 0; } 9%,21% { opacity: 1; } 7% { opacity: 0; } 23% { opacity: 0; } }
+  @keyframes lit2 { 0%,100% { opacity: 0; } 24%,36% { opacity: 1; } 22% { opacity: 0; } 38% { opacity: 0; } }
+  @keyframes lit3 { 0%,100% { opacity: 0; } 39%,85% { opacity: 1; } 37% { opacity: 0; } 87% { opacity: 0; } }
+</style>
+<defs>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="5" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="softglow" x="-80%" y="-80%" width="260%" height="260%">
+    <feGaussianBlur stdDeviation="14"/>
+  </filter>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M40 0H0V40" fill="none" stroke="#1FFF8B" stroke-opacity="0.06"/>
+  </pattern>
+  <clipPath id="card"><rect width="1200" height="300" rx="24"/></clipPath>
+</defs>
+<g clip-path="url(#card)">
+
+  <rect width="1200" height="300" fill="#030706"/>
+  <rect width="1200" height="300" fill="url(#grid)"/>
+  <text x="40" y="50" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="900" letter-spacing="6" fill="#1FFF8B"
+        filter="url(#glow)">WATCH LIFECYCLE</text>
+  <text x="1160" y="50" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" letter-spacing="3"
+        fill="#9BFFAE" fill-opacity="0.55">lib/models/watch_phase.dart</text>
+  <path d="M1050.0,172 V236 Q1050.0,250 1036.0,250 H164.0 Q150.0,250 150.0,236 V180" fill="none" stroke="#113C25" stroke-width="3"/>
+  <path d="M750.0,172 V250" fill="none" stroke="#113C25" stroke-width="3" stroke-dasharray="6 6"/>
+  <polygon points="144.0,184 150.0,174 156.0,184" fill="#FF3B3B" fill-opacity="0.7"/>
+  <text x="450.0" y="272" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12"
+        fill="#9BFFAE" fill-opacity="0.7">manual revert ↺</text>
+  <text x="900.0" y="272" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12"
+        fill="#FF3B3B" fill-opacity="0.85">recharged · ready</text>
+  
+  <line x1="260" y1="130.0" x2="332" y2="130.0" stroke="#113C25" stroke-width="3"/>
+  <polygon points="330,124.0 340,130.0 330,136.0" fill="#1FFF8B" fill-opacity="0.6"/>
+  <text x="300.0" y="118.0" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12"
+        fill="#1FFF8B" fill-opacity="0.8">tap core</text>
+  <line x1="560" y1="130.0" x2="632" y2="130.0" stroke="#113C25" stroke-width="3"/>
+  <polygon points="630,124.0 640,130.0 630,136.0" fill="#1FFF8B" fill-opacity="0.6"/>
+  <text x="600.0" y="118.0" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12"
+        fill="#1FFF8B" fill-opacity="0.8">1.4 s</text>
+  <line x1="860" y1="130.0" x2="932" y2="130.0" stroke="#113C25" stroke-width="3"/>
+  <polygon points="930,124.0 940,130.0 930,136.0" fill="#1FFF8B" fill-opacity="0.6"/>
+  <text x="900.0" y="118.0" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12"
+        fill="#1FFF8B" fill-opacity="0.8">timeout</text>
+  <circle r="7" fill="#D8FFE4" filter="url(#glow)">
+    <animateMotion dur="10.0s" repeatCount="indefinite" path="M150.0,130.0 H1050.0 V250 H150.0 Z"/>
+  </circle>
+  
+  <g>
+    <rect x="40" y="88" width="220" height="84" rx="14" fill="#07140D" stroke="#113C25" stroke-width="2"/>
+    <rect x="40" y="88" width="220" height="84" rx="14" fill="#1FFF8B" fill-opacity="0.12" stroke="#1FFF8B"
+          stroke-width="3" filter="url(#glow)" style="animation: lit0 10.0s linear infinite"></rect>
+    <text x="150.0" y="126" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="19" font-weight="700"
+          letter-spacing="2" fill="#1FFF8B">IDLE</text>
+    <text x="150.0" y="150" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12"
+          fill="#9BFFAE" fill-opacity="0.65">turn the dial</text>
+  </g>
+  <g>
+    <rect x="340" y="88" width="220" height="84" rx="14" fill="#07140D" stroke="#113C25" stroke-width="2"/>
+    <rect x="340" y="88" width="220" height="84" rx="14" fill="#D8FFE4" fill-opacity="0.12" stroke="#D8FFE4"
+          stroke-width="3" filter="url(#glow)" style="animation: lit1 10.0s linear infinite"></rect>
+    <text x="450.0" y="126" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="19" font-weight="700"
+          letter-spacing="2" fill="#D8FFE4">TRANSFORMING</text>
+    <text x="450.0" y="150" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12"
+          fill="#9BFFAE" fill-opacity="0.65">charge · flash</text>
+  </g>
+  <g>
+    <rect x="640" y="88" width="220" height="84" rx="14" fill="#07140D" stroke="#113C25" stroke-width="2"/>
+    <rect x="640" y="88" width="220" height="84" rx="14" fill="#3BA8FF" fill-opacity="0.12" stroke="#3BA8FF"
+          stroke-width="3" filter="url(#glow)" style="animation: lit2 10.0s linear infinite"><animate attributeName="stroke" values="#3BA8FF;#7BE35A;#C8E83A;#FF7A1A;#B0C4DE;#E3CF94;#9BE15D;#39FF14;#B57BFF;#FFE04D;#FF4D4D;#3BA8FF" dur="11s" repeatCount="indefinite"/><animate attributeName="fill" values="#3BA8FF;#7BE35A;#C8E83A;#FF7A1A;#B0C4DE;#E3CF94;#9BE15D;#39FF14;#B57BFF;#FFE04D;#FF4D4D;#3BA8FF" dur="11s" repeatCount="indefinite"/></rect>
+    <text x="750.0" y="126" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="19" font-weight="700"
+          letter-spacing="2" fill="#3BA8FF">TRANSFORMED<animate attributeName="fill" values="#3BA8FF;#7BE35A;#C8E83A;#FF7A1A;#B0C4DE;#E3CF94;#9BE15D;#39FF14;#B57BFF;#FFE04D;#FF4D4D;#3BA8FF" dur="11s" repeatCount="indefinite"/></text>
+    <text x="750.0" y="150" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12"
+          fill="#9BFFAE" fill-opacity="0.65">15 s countdown</text>
+  </g>
+  <g>
+    <rect x="940" y="88" width="220" height="84" rx="14" fill="#07140D" stroke="#113C25" stroke-width="2"/>
+    <rect x="940" y="88" width="220" height="84" rx="14" fill="#FF3B3B" fill-opacity="0.12" stroke="#FF3B3B"
+          stroke-width="3" filter="url(#glow)" style="animation: lit3 10.0s linear infinite"></rect>
+    <text x="1050.0" y="126" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="19" font-weight="700"
+          letter-spacing="2" fill="#FF3B3B">RECHARGING</text>
+    <text x="1050.0" y="150" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12"
+          fill="#9BFFAE" fill-opacity="0.65">8 s · input locked</text>
+  </g>
+
+</g>
+<rect x="1" y="1" width="1198" height="298" rx="23" fill="none" stroke="#113C25" stroke-width="2"/>
+</svg>

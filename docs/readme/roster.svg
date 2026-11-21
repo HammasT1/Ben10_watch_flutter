@@ -1,0 +1,526 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 694" width="1200" height="694" role="img">
+<style>
+  .spin { transform-box: view-box; animation: spin 36s linear infinite; }
+  .spin-rev { transform-box: view-box; animation: spin 48s linear infinite reverse; }
+  .breathe { transform-box: fill-box; transform-origin: center; animation: breathe 2.4s ease-in-out infinite; }
+  .flicker { animation: flicker 6s linear infinite; }
+  .blink { animation: blink 1s steps(1) infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes breathe { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.05); opacity: 1; } }
+  @keyframes flicker { 0%,18%,22%,62%,64%,100% { opacity: 1; } 20%,63% { opacity: .45; } }
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes wave { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+
+  .sel { opacity: 0; animation: sel 4.40s ease-in-out infinite both; }
+  @keyframes sel { 0%,20%,100% { opacity: 0; } 4%,12% { opacity: 1; } }
+</style>
+<defs>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="5" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="softglow" x="-80%" y="-80%" width="260%" height="260%">
+    <feGaussianBlur stdDeviation="14"/>
+  </filter>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M40 0H0V40" fill="none" stroke="#1FFF8B" stroke-opacity="0.06"/>
+  </pattern>
+  <clipPath id="card"><rect width="1200" height="694" rx="24"/></clipPath>
+</defs>
+<g clip-path="url(#card)">
+
+  <rect width="1200" height="694" fill="#030706"/>
+  <rect width="1200" height="694" fill="url(#grid)"/>
+  <text x="600.0" y="54" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="30" font-weight="900"
+        letter-spacing="8" fill="#1FFF8B" filter="url(#glow)">ALIEN ROSTER</text>
+  <text x="600.0" y="80" text-anchor="middle" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" letter-spacing="4"
+        fill="#9BFFAE" fill-opacity="0.6">SCANNING DNA  //  11 SAMPLES LOADED</text>
+  
+    <g transform="translate(30,104)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#3BA8FF" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#3BA8FF" fill-opacity="0.08" stroke="#3BA8FF" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 0.0s"/>
+      <circle cx="48" cy="52" r="31" fill="#3BA8FF" fill-opacity="0.12" stroke="#3BA8FF" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 0.0s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#3BA8FF"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#3BA8FF">XLR8</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Kineceleran</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Kinet</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="68" height="6" rx="3" fill="#3BA8FF">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.20s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#3BA8FF">4</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#3BA8FF">
+        <animate attributeName="width" values="0;170" dur="1.4s" begin="0.25s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#3BA8FF">10</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="85" height="6" rx="3" fill="#3BA8FF">
+        <animate attributeName="width" values="0;85" dur="1.4s" begin="0.30s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#3BA8FF">5</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="68" height="6" rx="3" fill="#3BA8FF">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.35s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#3BA8FF">4</text>
+    </g>
+    <g transform="translate(320,104)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#7BE35A" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#7BE35A" fill-opacity="0.08" stroke="#7BE35A" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 0.4s"/>
+      <circle cx="48" cy="52" r="31" fill="#7BE35A" fill-opacity="0.12" stroke="#7BE35A" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 0.2s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#7BE35A"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#7BE35A">Wildvine</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Florauna</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Flors Verdance</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="85" height="6" rx="3" fill="#7BE35A">
+        <animate attributeName="width" values="0;85" dur="1.4s" begin="0.28s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#7BE35A">5</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="68" height="6" rx="3" fill="#7BE35A">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.33s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#7BE35A">4</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="68" height="6" rx="3" fill="#7BE35A">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.38s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#7BE35A">4</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="119" height="6" rx="3" fill="#7BE35A">
+        <animate attributeName="width" values="0;119" dur="1.4s" begin="0.43s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#7BE35A">7</text>
+    </g>
+    <g transform="translate(610,104)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#C8E83A" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#C8E83A" fill-opacity="0.08" stroke="#C8E83A" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 0.8s"/>
+      <circle cx="48" cy="52" r="31" fill="#C8E83A" fill-opacity="0.12" stroke="#C8E83A" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 0.4s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#C8E83A"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#C8E83A">Stinkfly</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Lepidopterran</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Lepidopterra</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="51" height="6" rx="3" fill="#C8E83A">
+        <animate attributeName="width" values="0;51" dur="1.4s" begin="0.36s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#C8E83A">3</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="119" height="6" rx="3" fill="#C8E83A">
+        <animate attributeName="width" values="0;119" dur="1.4s" begin="0.41s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#C8E83A">7</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="68" height="6" rx="3" fill="#C8E83A">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.46s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#C8E83A">4</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="51" height="6" rx="3" fill="#C8E83A">
+        <animate attributeName="width" values="0;51" dur="1.4s" begin="0.51s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#C8E83A">3</text>
+    </g>
+    <g transform="translate(900,104)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#FF7A1A" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#FF7A1A" fill-opacity="0.08" stroke="#FF7A1A" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 1.2s"/>
+      <circle cx="48" cy="52" r="31" fill="#FF7A1A" fill-opacity="0.12" stroke="#FF7A1A" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 0.6s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#FF7A1A"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#FF7A1A">Heatblast</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Pyronite</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Pyros</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="102" height="6" rx="3" fill="#FF7A1A">
+        <animate attributeName="width" values="0;102" dur="1.4s" begin="0.44s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FF7A1A">6</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="85" height="6" rx="3" fill="#FF7A1A">
+        <animate attributeName="width" values="0;85" dur="1.4s" begin="0.49s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FF7A1A">5</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="85" height="6" rx="3" fill="#FF7A1A">
+        <animate attributeName="width" values="0;85" dur="1.4s" begin="0.54s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FF7A1A">5</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="102" height="6" rx="3" fill="#FF7A1A">
+        <animate attributeName="width" values="0;102" dur="1.4s" begin="0.59s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FF7A1A">6</text>
+    </g>
+    <g transform="translate(30,296)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#B0C4DE" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#B0C4DE" fill-opacity="0.08" stroke="#B0C4DE" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 1.6s"/>
+      <circle cx="48" cy="52" r="31" fill="#B0C4DE" fill-opacity="0.12" stroke="#B0C4DE" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 0.8s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#B0C4DE"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#B0C4DE">Benwolf</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Loboan</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Anur Transyl</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="119" height="6" rx="3" fill="#B0C4DE">
+        <animate attributeName="width" values="0;119" dur="1.4s" begin="0.52s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#B0C4DE">7</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="102" height="6" rx="3" fill="#B0C4DE">
+        <animate attributeName="width" values="0;102" dur="1.4s" begin="0.57s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#B0C4DE">6</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="68" height="6" rx="3" fill="#B0C4DE">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.62s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#B0C4DE">4</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="102" height="6" rx="3" fill="#B0C4DE">
+        <animate attributeName="width" values="0;102" dur="1.4s" begin="0.67s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#B0C4DE">6</text>
+    </g>
+    <g transform="translate(320,296)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#E3CF94" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#E3CF94" fill-opacity="0.08" stroke="#E3CF94" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 2.0s"/>
+      <circle cx="48" cy="52" r="31" fill="#E3CF94" fill-opacity="0.12" stroke="#E3CF94" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 1.0s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#E3CF94"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#E3CF94">Benmummy</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Thep Khufan</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Anur Khufos</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="102" height="6" rx="3" fill="#E3CF94">
+        <animate attributeName="width" values="0;102" dur="1.4s" begin="0.60s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#E3CF94">6</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="68" height="6" rx="3" fill="#E3CF94">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.65s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#E3CF94">4</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="68" height="6" rx="3" fill="#E3CF94">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.70s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#E3CF94">4</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="136" height="6" rx="3" fill="#E3CF94">
+        <animate attributeName="width" values="0;136" dur="1.4s" begin="0.75s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#E3CF94">8</text>
+    </g>
+    <g transform="translate(610,296)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#9BE15D" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#9BE15D" fill-opacity="0.08" stroke="#9BE15D" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 2.4s"/>
+      <circle cx="48" cy="52" r="31" fill="#9BE15D" fill-opacity="0.12" stroke="#9BE15D" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 1.2s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#9BE15D"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#9BE15D">Upchuck</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Gourmand</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Peptos XI</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="68" height="6" rx="3" fill="#9BE15D">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.68s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BE15D">4</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="51" height="6" rx="3" fill="#9BE15D">
+        <animate attributeName="width" values="0;51" dur="1.4s" begin="0.73s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BE15D">3</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="68" height="6" rx="3" fill="#9BE15D">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.78s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BE15D">4</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="102" height="6" rx="3" fill="#9BE15D">
+        <animate attributeName="width" values="0;102" dur="1.4s" begin="0.83s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BE15D">6</text>
+    </g>
+    <g transform="translate(900,296)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#39FF14" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#39FF14" fill-opacity="0.08" stroke="#39FF14" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 2.8s"/>
+      <circle cx="48" cy="52" r="31" fill="#39FF14" fill-opacity="0.12" stroke="#39FF14" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 1.4s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#39FF14"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#39FF14">Upgrade</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Galvanic Mechamorph</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Galvan B</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="68" height="6" rx="3" fill="#39FF14">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.76s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#39FF14">4</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="85" height="6" rx="3" fill="#39FF14">
+        <animate attributeName="width" values="0;85" dur="1.4s" begin="0.81s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#39FF14">5</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="153" height="6" rx="3" fill="#39FF14">
+        <animate attributeName="width" values="0;153" dur="1.4s" begin="0.86s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#39FF14">9</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="85" height="6" rx="3" fill="#39FF14">
+        <animate attributeName="width" values="0;85" dur="1.4s" begin="0.91s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#39FF14">5</text>
+    </g>
+    <g transform="translate(175,488)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#B57BFF" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#B57BFF" fill-opacity="0.08" stroke="#B57BFF" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 3.2s"/>
+      <circle cx="48" cy="52" r="31" fill="#B57BFF" fill-opacity="0.12" stroke="#B57BFF" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 1.6s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#B57BFF"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#B57BFF">Eye Guy</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Opticoid</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Unknown</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="85" height="6" rx="3" fill="#B57BFF">
+        <animate attributeName="width" values="0;85" dur="1.4s" begin="0.84s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#B57BFF">5</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="68" height="6" rx="3" fill="#B57BFF">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="0.89s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#B57BFF">4</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="85" height="6" rx="3" fill="#B57BFF">
+        <animate attributeName="width" values="0;85" dur="1.4s" begin="0.94s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#B57BFF">5</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="85" height="6" rx="3" fill="#B57BFF">
+        <animate attributeName="width" values="0;85" dur="1.4s" begin="0.99s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#B57BFF">5</text>
+    </g>
+    <g transform="translate(465,488)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#FFE04D" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#FFE04D" fill-opacity="0.08" stroke="#FFE04D" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 3.6s"/>
+      <circle cx="48" cy="52" r="31" fill="#FFE04D" fill-opacity="0.12" stroke="#FFE04D" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 1.8s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#FFE04D"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#FFE04D">Frankenstrike</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Transylian</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Anur Transyl</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="153" height="6" rx="3" fill="#FFE04D">
+        <animate attributeName="width" values="0;153" dur="1.4s" begin="0.92s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FFE04D">9</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="51" height="6" rx="3" fill="#FFE04D">
+        <animate attributeName="width" values="0;51" dur="1.4s" begin="0.97s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FFE04D">3</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="102" height="6" rx="3" fill="#FFE04D">
+        <animate attributeName="width" values="0;102" dur="1.4s" begin="1.02s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FFE04D">6</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="136" height="6" rx="3" fill="#FFE04D">
+        <animate attributeName="width" values="0;136" dur="1.4s" begin="1.07s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FFE04D">8</text>
+    </g>
+    <g transform="translate(755,488)">
+      <rect width="270" height="172" rx="16" fill="#07140D" stroke="#FF4D4D" stroke-opacity="0.3" stroke-width="1.5"/>
+      <rect width="270" height="172" rx="16" fill="#FF4D4D" fill-opacity="0.08" stroke="#FF4D4D" stroke-width="2.5"
+            filter="url(#glow)" class="sel" style="animation-delay: 4.0s"/>
+      <circle cx="48" cy="52" r="31" fill="#FF4D4D" fill-opacity="0.12" stroke="#FF4D4D" stroke-width="2"/>
+      <g class="breathe" style="animation-delay: 2.0s">
+    <g>
+      <circle cx="48" cy="52" r="17" fill="#FF4D4D"/>
+      <polygon points="29.64,37.38 45.62,52 29.64,66.62" fill="#07140D"/>
+      <polygon points="66.36,37.38 50.38,52 66.36,66.62" fill="#07140D"/>
+    </g></g>
+      <text x="92" y="46" font-family="'Segoe UI', 'Helvetica Neue', Ubuntu, Arial, sans-serif" font-size="22" font-weight="800" fill="#FF4D4D">Four Arms</text>
+      <text x="92" y="67" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="12" fill="#D8FFE4" fill-opacity="0.8">Tetramand</text>
+      <text x="92" y="84" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="11" fill="#9BFFAE" fill-opacity="0.5">⌂ Khoros</text>
+      
+      <text x="20" y="116" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">STR</text>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="110" width="170" height="6" rx="3" fill="#FF4D4D">
+        <animate attributeName="width" values="0;170" dur="1.4s" begin="1.00s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="116" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FF4D4D">10</text>
+      <text x="20" y="131" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">SPD</text>
+      <rect x="54" y="125" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="125" width="68" height="6" rx="3" fill="#FF4D4D">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="1.05s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="131" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FF4D4D">4</text>
+      <text x="20" y="146" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">INT</text>
+      <rect x="54" y="140" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="140" width="68" height="6" rx="3" fill="#FF4D4D">
+        <animate attributeName="width" values="0;68" dur="1.4s" begin="1.10s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="146" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FF4D4D">4</text>
+      <text x="20" y="161" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#9BFFAE" fill-opacity="0.55">DUR</text>
+      <rect x="54" y="155" width="170" height="6" rx="3" fill="#113C25"/>
+      <rect x="54" y="155" width="136" height="6" rx="3" fill="#FF4D4D">
+        <animate attributeName="width" values="0;136" dur="1.4s" begin="1.15s"
+                 fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1"/>
+      </rect>
+      <text x="252" y="161" text-anchor="end" font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace" font-size="10" fill="#FF4D4D">8</text>
+    </g>
+
+</g>
+<rect x="1" y="1" width="1198" height="692" rx="23" fill="none" stroke="#113C25" stroke-width="2"/>
+</svg>
