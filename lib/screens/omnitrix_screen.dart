@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 
+import '../data/aliens.dart';
+import '../models/alien.dart';
 import '../models/effect_seeds.dart';
 import '../models/watch_phase.dart';
 import '../painters/bubble_painter.dart';
@@ -10,6 +12,8 @@ import '../painters/ring_pulse_painter.dart';
 import '../painters/shockwave_painter.dart';
 import '../painters/spark_painter.dart';
 import '../services/watch_feedback.dart';
+import '../widgets/alien_image.dart';
+import '../widgets/alien_info_sheet.dart';
 import '../widgets/transformed_view.dart';
 
 class OmnitrixScreen extends StatefulWidget {
@@ -61,10 +65,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
   static const _green = Color(0xFF1FFF8B);
   static const _red = Color(0xFFFF3B3B);
 
-  final List<String> _aliens = List.generate(
-    11,
-    (i) => 'assets/images/${i + 1}.png',
-  );
+  final List<Alien> _aliens = aliens;
 
   final math.Random _random = math.Random();
   final List<SparkSeed> _sparks = [];
@@ -95,6 +96,9 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
   /// dial and must not also count as a core tap.
   bool _touchCaughtSpin = false;
   int _selectedAlien = 0;
+
+  /// Alien selected before the last change; its color fades into the new one.
+  int _previousAlien = 0;
 
   @override
   void initState() {
@@ -178,6 +182,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
     }
     if (_phase != WatchPhase.idle) return;
     _feedback.play(WatchEvent.transformStart);
+    _previousAlien = _selectedAlien;
     setState(() => _phase = WatchPhase.transforming);
     _resetSparkSeeds();
     _changeController.forward(from: 0);
@@ -328,11 +333,42 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
       return;
     }
 
+    _springDialTo(target, velocity: velocity);
+  }
+
+  void _springDialTo(double target, {double velocity = 0}) {
     _dialController.value = _dialAngle;
     _dialController.animateWith(
       SpringSimulation(_dialSpring, _dialAngle, target, velocity),
     );
   }
+
+  /// Turns the dial the short way round to [index]'s slot.
+  void _selectAlien(int index) {
+    if (_phase != WatchPhase.idle || index == _selectedAlien) return;
+    final base = -index * _slice;
+    final turns = ((_dialAngle - base) / (math.pi * 2)).round();
+    _springDialTo(base + (turns * math.pi * 2));
+  }
+
+  void _openInfo() {
+    showAlienInfoSheet(
+      context,
+      aliens: _aliens,
+      initialIndex: _selectedAlien,
+      onSelect: _phase == WatchPhase.idle ? _selectAlien : null,
+    );
+  }
+
+  Alien get _alien => _aliens[_selectedAlien];
+
+  /// Current theme color, cross-fading from the previous alien's color
+  /// during the change flash.
+  Color get _themeColor => Color.lerp(
+    _aliens[_previousAlien].color,
+    _alien.color,
+    _flashAnimation.value,
+  )!;
 
   void _onDialTick() {
     setState(() => _dialAngle = _dialController.value);
@@ -382,6 +418,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
 
     if (index != _selectedAlien) {
       setState(() {
+        _previousAlien = _selectedAlien;
         _selectedAlien = index;
       });
       _feedback.play(WatchEvent.dialTick);
@@ -424,11 +461,11 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
             SafeArea(
               child: _phase == WatchPhase.transformed
                   ? TransformedView(
-                      alienAsset: _aliens[_selectedAlien],
-                      label: 'ALIEN ${_selectedAlien + 1}',
+                      alien: _alien,
                       timeout: _timeoutController,
                       totalSeconds: _timeoutDuration.inSeconds,
                       onRevert: _revert,
+                      onInfo: _openInfo,
                     )
                   : _buildWatchLayout(),
             ),
@@ -499,6 +536,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
                 ),
               ),
             ),
+            _buildInfoButton(),
             _buildHint(),
             const SizedBox(height: 16),
           ],
@@ -595,7 +633,11 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
     // Idle shows a dark silhouette; charging lights it up; recharge is red.
     final tint = recharging
         ? const Color(0xFF3A0A0A)
-        : Color.lerp(const Color(0xFF03140A), const Color(0xFFD8FFE4), charge)!;
+        : Color.lerp(
+            const Color(0xFF03140A),
+            alienHighlight(_alien.color),
+            charge,
+          )!;
 
     return Align(
       alignment: const Alignment(0.0, 0.01),
@@ -609,7 +651,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(tint, BlendMode.srcIn),
               child: Image.asset(
-                _aliens[_selectedAlien],
+                _alien.image,
                 fit: BoxFit.contain,
                 filterQuality: FilterQuality.high,
                 errorBuilder: (context, error, stackTrace) {
@@ -637,7 +679,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
         painter: RingPulsePainter(
           t: _pulseController.value,
           intensity: math.max(_flashAnimation.value, _charge),
-          color: recharging ? _red : _green,
+          color: recharging ? _red : _themeColor,
         ),
       ),
     );
@@ -648,6 +690,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
     if (flash <= 0.01) {
       return const SizedBox.shrink();
     }
+    final color = _themeColor;
     return IgnorePointer(
       child: Container(
         width: size * (0.30 + (flash * 0.06)),
@@ -656,8 +699,8 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
           shape: BoxShape.circle,
           gradient: RadialGradient(
             colors: [
-              const Color(0xFF98FFB7).withValues(alpha: 0.55 * flash),
-              const Color(0xFF22FF81).withValues(alpha: 0.35 * flash),
+              alienHighlight(color).withValues(alpha: 0.55 * flash),
+              color.withValues(alpha: 0.35 * flash),
               Colors.transparent,
             ],
             stops: const [0.0, 0.55, 1.0],
@@ -674,7 +717,11 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
     return IgnorePointer(
       child: CustomPaint(
         size: Size.square(size),
-        painter: SparkPainter(sparks: _sparks, progress: _flashAnimation.value),
+        painter: SparkPainter(
+          sparks: _sparks,
+          progress: _flashAnimation.value,
+          color: alienHighlight(_themeColor),
+        ),
       ),
     );
   }
@@ -693,8 +740,8 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
         color = const Color(0xFFFF8A8A);
       case WatchPhase.idle:
       case WatchPhase.transformed:
-        text = 'ALIEN ${_selectedAlien + 1}';
-        color = const Color(0xFF91FFA8);
+        text = _alien.name.toUpperCase();
+        color = alienHighlight(_themeColor);
     }
     return Positioned(
       bottom: 18,
@@ -702,6 +749,7 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
         opacity: 0.9,
         child: Text(
           text,
+          key: const Key('hud-label'),
           style: TextStyle(
             letterSpacing: 2,
             fontWeight: FontWeight.w700,
@@ -721,6 +769,32 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
         _feedback.muted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
       ),
       onPressed: () => setState(() => _feedback.muted = !_feedback.muted),
+    );
+  }
+
+  Widget _buildInfoButton() {
+    final idle = _phase == WatchPhase.idle;
+    return IgnorePointer(
+      ignoring: !idle,
+      child: AnimatedOpacity(
+        opacity: idle ? 1 : 0,
+        duration: const Duration(milliseconds: 250),
+        child: TextButton.icon(
+          key: const Key('alien-info'),
+          onPressed: _openInfo,
+          style: TextButton.styleFrom(
+            foregroundColor: alienHighlight(_alien.color),
+          ),
+          icon: const Icon(Icons.info_outline, size: 18),
+          label: Text(
+            '${_alien.name.toUpperCase()} INFO',
+            style: const TextStyle(
+              letterSpacing: 2,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -756,14 +830,18 @@ class _OmnitrixScreenState extends State<OmnitrixScreen>
           if (wave > 0 && wave < 1) {
             layers.add(
               CustomPaint(
-                painter: ShockwavePainter(progress: wave, color: _green),
+                painter: ShockwavePainter(progress: wave, color: _alien.color),
               ),
             );
           }
           if (flash > 0) {
             layers.add(
               ColoredBox(
-                color: const Color(0xFFCCFFDD).withValues(alpha: flash * 0.9),
+                color: Color.lerp(
+                  _alien.color,
+                  Colors.white,
+                  0.7,
+                )!.withValues(alpha: flash * 0.9),
               ),
             );
           }

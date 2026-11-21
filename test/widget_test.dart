@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:ben10_flutter/data/aliens.dart';
 import 'package:ben10_flutter/main.dart';
 import 'package:ben10_flutter/services/watch_feedback.dart';
 
 void main() {
   final dial = find.byKey(const Key('watch-dial'));
 
+  String hudLabel(WidgetTester tester) =>
+      tester.widget<Text>(find.byKey(const Key('hud-label'))).data!;
+
   testWidgets('Omnitrix watch loads in idle state', (tester) async {
     await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
 
-    expect(find.text('ALIEN 1'), findsOneWidget);
+    expect(find.text('XLR8'), findsOneWidget);
     expect(find.text('TURN THE DIAL  •  TAP THE CORE'), findsOneWidget);
     expect(find.text('REVERT'), findsNothing);
   });
@@ -28,7 +32,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 800));
     await tester.pump(const Duration(milliseconds: 800));
     expect(find.text('REVERT'), findsOneWidget);
-    expect(find.text('ALIEN 1'), findsOneWidget);
+    expect(find.text('XLR8'), findsOneWidget);
 
     // Timeout -> recharging, dial locked.
     await tester.pump(const Duration(seconds: 15));
@@ -44,7 +48,7 @@ void main() {
     await tester.pump(const Duration(seconds: 8, milliseconds: 100));
     await tester.pump();
     expect(find.textContaining('RECHARGING'), findsNothing);
-    expect(find.text('ALIEN 1'), findsOneWidget);
+    expect(find.text('XLR8'), findsOneWidget);
   });
 
   testWidgets('revert returns to idle without recharging', (tester) async {
@@ -59,7 +63,7 @@ void main() {
     await tester.pump();
     expect(find.text('REVERT'), findsNothing);
     expect(find.textContaining('RECHARGING'), findsNothing);
-    expect(find.text('ALIEN 1'), findsOneWidget);
+    expect(find.text('XLR8'), findsOneWidget);
   });
 
   testWidgets('tapping off-core does not transform', (tester) async {
@@ -81,8 +85,7 @@ void main() {
       for (var i = 0; i < 40; i++) {
         await tester.pump(const Duration(milliseconds: 100));
       }
-      final hud = tester.widgetList<Text>(find.textContaining('ALIEN '));
-      return hud.single.data!;
+      return hudLabel(tester);
     }
 
     testWidgets('a flick coasts past several aliens then stops', (
@@ -92,13 +95,10 @@ void main() {
 
       await tester.flingFrom(rimPoint(tester), const Offset(0, 160), 2400);
       await tester.pump(const Duration(milliseconds: 100));
-      final mid = tester
-          .widgetList<Text>(find.textContaining('ALIEN '))
-          .single
-          .data;
+      final mid = hudLabel(tester);
 
       final rest = await settle(tester);
-      expect(rest, isNot('ALIEN 1'));
+      expect(rest, isNot('XLR8'));
       expect(rest, isNot(mid), reason: 'dial should keep coasting');
 
       // Fully settled: more time changes nothing.
@@ -118,7 +118,7 @@ void main() {
       }
       await gesture.up();
 
-      expect(await settle(tester), 'ALIEN 1');
+      expect(await settle(tester), 'XLR8');
     });
 
     testWidgets('core tap is ignored while the dial is still spinning', (
@@ -213,6 +213,77 @@ void main() {
       await tester.pump();
       expect(feedback.muted, isTrue);
       expect(find.byIcon(Icons.volume_off_rounded), findsOneWidget);
+    });
+  });
+
+  group('alien info', () {
+    testWidgets('alien data is complete and slots map to images', (
+      tester,
+    ) async {
+      expect(aliens, hasLength(11));
+      for (var i = 0; i < aliens.length; i++) {
+        final alien = aliens[i];
+        expect(alien.image, 'assets/images/${i + 1}.png');
+        expect(alien.name, isNotEmpty);
+        expect(alien.powers, isNotEmpty);
+        for (final stat in alien.stats.asMap.values) {
+          expect(stat, inInclusiveRange(1, 10));
+        }
+      }
+      expect(aliens.map((a) => a.name).toSet(), hasLength(aliens.length));
+    });
+
+    testWidgets('info sheet opens on the selected alien', (tester) async {
+      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+
+      await tester.tap(find.byKey(const Key('alien-info')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.textContaining(aliens[0].species), findsOneWidget);
+      for (final power in aliens[0].powers) {
+        expect(find.text(power), findsOneWidget);
+      }
+      expect(find.text('STRENGTH'), findsOneWidget);
+    });
+
+    testWidgets('SET ON DIAL turns the dial to the swiped-to alien', (
+      tester,
+    ) async {
+      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+
+      await tester.tap(find.byKey(const Key('alien-info')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+
+      // Swipe two cards forward.
+      for (var i = 0; i < 2; i++) {
+        await tester.fling(find.byType(PageView), const Offset(-300, 0), 1500);
+        for (var f = 0; f < 10; f++) {
+          await tester.pump(const Duration(milliseconds: 60));
+        }
+      }
+      expect(find.textContaining(aliens[2].species), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('select-alien')));
+      for (var i = 0; i < 40; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(hudLabel(tester), aliens[2].name.toUpperCase());
+    });
+
+    testWidgets('transformed view shows the alien name', (tester) async {
+      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+
+      await tester.tapAt(tester.getCenter(dial));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
+      await tester.pump(const Duration(milliseconds: 800));
+
+      final name = tester.widget<Text>(
+        find.byKey(const Key('transformed-name')),
+      );
+      expect(name.data, aliens[0].name.toUpperCase());
+      expect(find.byKey(const Key('transformed-info')), findsOneWidget);
     });
   });
 }

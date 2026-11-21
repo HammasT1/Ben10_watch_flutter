@@ -1,31 +1,35 @@
 import 'package:flutter/material.dart';
 
+import '../models/alien.dart';
+import 'alien_image.dart';
+
 /// Full-screen view shown while an alien is active, with the timeout
-/// countdown and a manual revert button.
+/// countdown, an info button and a manual revert button.
 class TransformedView extends StatelessWidget {
   const TransformedView({
     super.key,
-    required this.alienAsset,
-    required this.label,
+    required this.alien,
     required this.timeout,
     required this.totalSeconds,
     required this.onRevert,
+    required this.onInfo,
   });
 
-  final String alienAsset;
-  final String label;
+  final Alien alien;
 
   /// Runs 0 -> 1 over the transformation's lifetime.
   final Animation<double> timeout;
   final int totalSeconds;
   final VoidCallback onRevert;
+  final VoidCallback onInfo;
 
-  static const _green = Color(0xFF1FFF8B);
   static const _red = Color(0xFFFF3B3B);
   static const _warningSeconds = 3;
 
   @override
   Widget build(BuildContext context) {
+    final color = alien.color;
+    final highlight = alienHighlight(color);
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
       duration: const Duration(milliseconds: 750),
@@ -47,42 +51,65 @@ class TransformedView extends StatelessWidget {
             children: [
               const SizedBox(height: 24),
               Text(
-                label,
-                style: const TextStyle(
+                alien.name.toUpperCase(),
+                key: const Key('transformed-name'),
+                style: TextStyle(
                   fontSize: 34,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 4,
-                  color: Color(0xFFB8FFD0),
-                  shadows: [Shadow(color: _green, blurRadius: 24)],
+                  color: highlight,
+                  shadows: [Shadow(color: color, blurRadius: 24)],
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                alien.species.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 12,
+                  letterSpacing: 3,
+                  color: highlight.withValues(alpha: 0.7),
                 ),
               ),
               Expanded(child: Center(child: _buildAlien(alienSize))),
               _buildCountdown(),
               const SizedBox(height: 20),
-              OutlinedButton.icon(
-                onPressed: onRevert,
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF9BFFAE),
-                  side: const BorderSide(color: _green, width: 1.4),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 22,
-                    vertical: 12,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  OutlinedButton.icon(
+                    onPressed: onRevert,
+                    style: _buttonStyle(color, highlight),
+                    icon: const Icon(Icons.power_settings_new),
+                    label: const Text(
+                      'REVERT',
+                      style: TextStyle(
+                        letterSpacing: 2,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
-                ),
-                icon: const Icon(Icons.power_settings_new),
-                label: const Text(
-                  'REVERT',
-                  style: TextStyle(
-                    letterSpacing: 2,
-                    fontWeight: FontWeight.w700,
+                  const SizedBox(width: 12),
+                  OutlinedButton(
+                    key: const Key('transformed-info'),
+                    onPressed: onInfo,
+                    style: _buttonStyle(color, highlight),
+                    child: const Icon(Icons.info_outline),
                   ),
-                ),
+                ],
               ),
               const SizedBox(height: 28),
             ],
           );
         },
       ),
+    );
+  }
+
+  ButtonStyle _buttonStyle(Color color, Color highlight) {
+    return OutlinedButton.styleFrom(
+      foregroundColor: highlight,
+      side: BorderSide(color: color, width: 1.4),
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
     );
   }
 
@@ -94,21 +121,15 @@ class TransformedView extends StatelessWidget {
         shape: BoxShape.circle,
         gradient: RadialGradient(
           colors: [
-            _green.withValues(alpha: 0.35),
-            _green.withValues(alpha: 0.08),
+            alien.color.withValues(alpha: 0.35),
+            alien.color.withValues(alpha: 0.08),
             Colors.transparent,
           ],
           stops: const [0.0, 0.6, 1.0],
         ),
       ),
       padding: EdgeInsets.all(size * 0.08),
-      child: Image.asset(
-        alienAsset,
-        fit: BoxFit.contain,
-        filterQuality: FilterQuality.high,
-        errorBuilder: (context, error, stackTrace) =>
-            const Icon(Icons.question_mark, color: Color(0xFF7FFF9E), size: 64),
-      ),
+      child: AlienImage(alien: alien, tint: alienHighlight(alien.color)),
     );
   }
 
@@ -121,7 +142,7 @@ class TransformedView extends StatelessWidget {
         final warning = seconds <= _warningSeconds;
         // Blink twice per second during the warning window.
         final blinkOn = ((timeout.value * totalSeconds * 4).floor()).isEven;
-        final color = warning ? _red : _green;
+        final color = warning ? _red : alien.color;
 
         return Opacity(
           opacity: warning && !blinkOn ? 0.35 : 1,
