@@ -5,7 +5,6 @@ import '../models/alien.dart';
 /// The aliens on the dial, in slot order (slot N uses `assets/images/N.png`).
 ///
 /// Edit freely: names, text, colors and stats are all read from here.
-/// Entries marked "UNCONFIRMED" were identified from the silhouette only.
 const List<Alien> aliens = [
   Alien(
     name: 'XLR8',
@@ -44,7 +43,6 @@ const List<Alien> aliens = [
     image: 'assets/images/3.png',
   ),
   Alien(
-    // UNCONFIRMED: identified from the silhouette only.
     name: 'Heatblast',
     species: 'Pyronite',
     homeworld: 'Pyros',
@@ -57,32 +55,31 @@ const List<Alien> aliens = [
     image: 'assets/images/4.png',
   ),
   Alien(
-    name: 'Wildmutt',
-    species: 'Vulpimancer',
-    homeworld: 'Vulpin',
+    name: 'Benwolf',
+    species: 'Loboan',
+    homeworld: 'Anur Transyl',
     description:
-        'An eyeless beast that senses the world through smell and hearing, '
-        'with the agility to pounce on anything.',
-    powers: ['Enhanced senses', 'Agility', 'Quill launch', 'Wall climbing'],
-    color: Color(0xFFFF9F43),
-    stats: AlienStats(strength: 6, speed: 7, intelligence: 3, durability: 5),
+        'A werewolf-like hunter with a sonic howl that can shatter stone '
+        'and senses sharp enough to track anything.',
+    powers: ['Sonic howl', 'Night vision', 'Claws', 'Enhanced smell'],
+    color: Color(0xFFB0C4DE),
+    stats: AlienStats(strength: 7, speed: 6, intelligence: 4, durability: 6),
     image: 'assets/images/5.png',
   ),
   Alien(
-    // UNCONFIRMED: identified from the silhouette only.
-    name: 'Diamondhead',
-    species: 'Petrosapien',
-    homeworld: 'Petropia',
+    name: 'Benmummy',
+    species: 'Thep Khufan',
+    homeworld: 'Anur Khufos',
     description:
-        'A crystal warrior who grows blades, shields and spikes from his '
-        'own body and reflects energy attacks.',
-    powers: ['Crystal growth', 'Energy reflection', 'Toughness', 'Shards'],
-    color: Color(0xFF3FF3D6),
-    stats: AlienStats(strength: 7, speed: 4, intelligence: 6, durability: 9),
+        'A bandage-wrapped mummy who lashes out with stretching '
+        'wrappings and can unravel himself to slip through the smallest '
+        'gaps.',
+    powers: ['Bandage tendrils', 'Stretching', 'Unraveling', 'Regeneration'],
+    color: Color(0xFFE3CF94),
+    stats: AlienStats(strength: 6, speed: 4, intelligence: 4, durability: 8),
     image: 'assets/images/6.png',
   ),
   Alien(
-    // UNCONFIRMED: identified from the silhouette only.
     name: 'Upchuck',
     species: 'Gourmand',
     homeworld: 'Peptos XI',
@@ -95,7 +92,6 @@ const List<Alien> aliens = [
     image: 'assets/images/7.png',
   ),
   Alien(
-    // UNCONFIRMED: identified from the silhouette only.
     name: 'Upgrade',
     species: 'Galvanic Mechamorph',
     homeworld: 'Galvan B',
@@ -108,29 +104,34 @@ const List<Alien> aliens = [
     image: 'assets/images/8.png',
   ),
   Alien(
-    // UNCONFIRMED: identified from the silhouette only.
-    name: 'Benwolf',
-    species: 'Loboan',
-    homeworld: 'Anur Transyl',
+    name: 'Eye Guy',
+    species: 'Opticoid',
+    homeworld: 'Unknown',
     description:
-        'A werewolf-like hunter with a sonic howl that can shatter stone '
-        'and senses sharp enough to track anything.',
-    powers: ['Sonic howl', 'Night vision', 'Claws', 'Enhanced smell'],
-    color: Color(0xFFB0C4DE),
-    stats: AlienStats(strength: 7, speed: 6, intelligence: 4, durability: 6),
+        'Covered in eyes from head to toe, he sees in every direction '
+        'at once and fires energy beams from any of them, including the '
+        'giant eye on his chest.',
+    powers: ['Eye beams', '360° vision', 'Chest eye blast', 'Enhanced sight'],
+    color: Color(0xFFB57BFF),
+    stats: AlienStats(strength: 5, speed: 4, intelligence: 5, durability: 5),
     image: 'assets/images/9.png',
   ),
   Alien(
-    // UNCONFIRMED: identified from the silhouette only.
-    name: 'Cannonbolt',
-    species: 'Arburian Pelarota',
-    homeworld: 'Arburia',
+    name: 'Frankenstrike',
+    species: 'Transylian',
+    homeworld: 'Anur Transyl',
     description:
-        'Curls into an armored ball and rolls like a wrecking ball, '
-        'ricocheting off walls at high speed.',
-    powers: ['Armored ball form', 'Ricochet', 'Toughness', 'Momentum'],
-    color: Color(0xFFFFD34D),
-    stats: AlienStats(strength: 7, speed: 7, intelligence: 3, durability: 9),
+        'A towering, stitched-together powerhouse who stores '
+        'electricity in the bolts on his back and unleashes it as '
+        'lightning.',
+    powers: [
+      'Electrokinesis',
+      'Super strength',
+      'Lightning bolts',
+      'Shock absorption',
+    ],
+    color: Color(0xFFFFE04D),
+    stats: AlienStats(strength: 9, speed: 3, intelligence: 6, durability: 8),
     image: 'assets/images/10.png',
   ),
   Alien(
