@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:ben10_flutter/data/aliens.dart';
 import 'package:ben10_flutter/main.dart';
+import 'package:ben10_flutter/screens/intro_screen.dart';
 import 'package:ben10_flutter/services/watch_feedback.dart';
 
 void main() {
@@ -12,7 +14,9 @@ void main() {
       tester.widget<Text>(find.byKey(const Key('hud-label'))).data!;
 
   testWidgets('Omnitrix watch loads in idle state', (tester) async {
-    await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+    await tester.pumpWidget(
+      OmnitrixApp(feedback: SilentWatchFeedback(), showIntro: false),
+    );
 
     expect(find.text('XLR8'), findsOneWidget);
     expect(find.text('TURN THE DIAL  •  TAP THE CORE'), findsOneWidget);
@@ -22,7 +26,9 @@ void main() {
   testWidgets('tapping the core transforms, times out and recharges', (
     tester,
   ) async {
-    await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+    await tester.pumpWidget(
+      OmnitrixApp(feedback: SilentWatchFeedback(), showIntro: false),
+    );
 
     await tester.tapAt(tester.getCenter(dial));
     await tester.pump();
@@ -52,7 +58,9 @@ void main() {
   });
 
   testWidgets('revert returns to idle without recharging', (tester) async {
-    await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+    await tester.pumpWidget(
+      OmnitrixApp(feedback: SilentWatchFeedback(), showIntro: false),
+    );
 
     await tester.tapAt(tester.getCenter(dial));
     await tester.pump();
@@ -67,7 +75,9 @@ void main() {
   });
 
   testWidgets('tapping off-core does not transform', (tester) async {
-    await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+    await tester.pumpWidget(
+      OmnitrixApp(feedback: SilentWatchFeedback(), showIntro: false),
+    );
 
     final rect = tester.getRect(dial);
     await tester.tapAt(rect.topLeft + const Offset(10, 10));
@@ -91,7 +101,9 @@ void main() {
     testWidgets('a flick coasts past several aliens then stops', (
       tester,
     ) async {
-      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+      await tester.pumpWidget(
+        OmnitrixApp(feedback: SilentWatchFeedback(), showIntro: false),
+      );
 
       await tester.flingFrom(rimPoint(tester), const Offset(0, 160), 2400);
       await tester.pump(const Duration(milliseconds: 100));
@@ -108,7 +120,9 @@ void main() {
     testWidgets('a small slow drag snaps back to the same alien', (
       tester,
     ) async {
-      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+      await tester.pumpWidget(
+        OmnitrixApp(feedback: SilentWatchFeedback(), showIntro: false),
+      );
 
       final gesture = await tester.startGesture(rimPoint(tester));
       // Well under half a slot (~16 degrees), moved slowly.
@@ -124,7 +138,9 @@ void main() {
     testWidgets('core tap is ignored while the dial is still spinning', (
       tester,
     ) async {
-      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+      await tester.pumpWidget(
+        OmnitrixApp(feedback: SilentWatchFeedback(), showIntro: false),
+      );
 
       await tester.flingFrom(rimPoint(tester), const Offset(0, 160), 2400);
       await tester.pump(const Duration(milliseconds: 50));
@@ -149,7 +165,9 @@ void main() {
 
     testWidgets('full cycle fires events in order', (tester) async {
       final feedback = SilentWatchFeedback();
-      await tester.pumpWidget(OmnitrixApp(feedback: feedback));
+      await tester.pumpWidget(
+        OmnitrixApp(feedback: feedback, showIntro: false),
+      );
 
       await transform(tester);
       expect(feedback.played, [
@@ -179,7 +197,9 @@ void main() {
 
     testWidgets('revert plays the revert event', (tester) async {
       final feedback = SilentWatchFeedback();
-      await tester.pumpWidget(OmnitrixApp(feedback: feedback));
+      await tester.pumpWidget(
+        OmnitrixApp(feedback: feedback, showIntro: false),
+      );
 
       await transform(tester);
       await tester.tap(find.text('REVERT'));
@@ -189,7 +209,9 @@ void main() {
 
     testWidgets('turning the dial ticks once per alien passed', (tester) async {
       final feedback = SilentWatchFeedback();
-      await tester.pumpWidget(OmnitrixApp(feedback: feedback));
+      await tester.pumpWidget(
+        OmnitrixApp(feedback: feedback, showIntro: false),
+      );
 
       final rect = tester.getRect(dial);
       await tester.flingFrom(
@@ -206,7 +228,9 @@ void main() {
 
     testWidgets('mute toggle flips the muted flag', (tester) async {
       final feedback = SilentWatchFeedback();
-      await tester.pumpWidget(OmnitrixApp(feedback: feedback));
+      await tester.pumpWidget(
+        OmnitrixApp(feedback: feedback, showIntro: false),
+      );
 
       expect(find.byIcon(Icons.volume_up_rounded), findsOneWidget);
       await tester.tap(find.byKey(const Key('mute-toggle')));
@@ -234,7 +258,9 @@ void main() {
     });
 
     testWidgets('info sheet opens on the selected alien', (tester) async {
-      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+      await tester.pumpWidget(
+        OmnitrixApp(feedback: SilentWatchFeedback(), showIntro: false),
+      );
 
       await tester.tap(find.byKey(const Key('alien-info')));
       await tester.pump();
@@ -249,7 +275,9 @@ void main() {
     testWidgets('SET ON DIAL turns the dial to the swiped-to alien', (
       tester,
     ) async {
-      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+      await tester.pumpWidget(
+        OmnitrixApp(feedback: SilentWatchFeedback(), showIntro: false),
+      );
 
       await tester.tap(find.byKey(const Key('alien-info')));
       await tester.pump();
@@ -272,7 +300,9 @@ void main() {
     });
 
     testWidgets('transformed view shows the alien name', (tester) async {
-      await tester.pumpWidget(OmnitrixApp(feedback: SilentWatchFeedback()));
+      await tester.pumpWidget(
+        OmnitrixApp(feedback: SilentWatchFeedback(), showIntro: false),
+      );
 
       await tester.tapAt(tester.getCenter(dial));
       await tester.pump();
@@ -284,6 +314,40 @@ void main() {
       );
       expect(name.data, aliens[0].name.toUpperCase());
       expect(find.byKey(const Key('transformed-info')), findsOneWidget);
+    });
+  });
+
+  group('3D intro', () {
+    Widget intro() => MaterialApp(
+      home: IntroScreen(
+        model: const SizedBox(key: Key('fake-model')),
+        next: (_) => const Scaffold(body: Text('WATCH SCREEN')),
+      ),
+    );
+
+    testWidgets('shows the model and an activate button', (tester) async {
+      await tester.pumpWidget(intro());
+
+      expect(find.byKey(const Key('fake-model')), findsOneWidget);
+      expect(find.text('ACTIVATE'), findsOneWidget);
+      expect(find.text('WATCH SCREEN'), findsNothing);
+    });
+
+    testWidgets('activate transitions to the watch screen', (tester) async {
+      await tester.pumpWidget(intro());
+
+      await tester.tap(find.byKey(const Key('activate')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 800));
+
+      expect(find.text('WATCH SCREEN'), findsOneWidget);
+      expect(find.text('ACTIVATE'), findsNothing);
+    });
+
+    testWidgets('intro model asset is bundled', (tester) async {
+      final data = await rootBundle.load(IntroScreen.modelAsset);
+      // glTF binary magic number.
+      expect(String.fromCharCodes(data.buffer.asUint8List(0, 4)), 'glTF');
     });
   });
 }
